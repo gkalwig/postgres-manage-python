@@ -18,11 +18,13 @@ Utility to backup, restore and list Postgresql databases from/to AWS S3 (or loca
 
       [setup]
       # define if LOCAL or S3 storage will be used when storing/restoring the backup
-      storage_engine='S3'
+      storage_engine=S3
 
       [S3]
-      bucket_name="db_backups.s3.my.domain.com"  # S3 bucket name (no need for s3:// prefix)
-      bucket_backup_path="postgres/"  # PATH in the bucket to store your backups
+      # S3 bucket name (no need for s3:// prefix)
+      bucket_name=db_backups.s3.my.domain.com 
+      # PATH in the bucket to store your backups
+      bucket_backup_path=postgres/  
 
       [local_storage]
       path=./backups/
@@ -50,16 +52,16 @@ Utility to backup, restore and list Postgresql databases from/to AWS S3 (or loca
 
 * Restore previously created database backups available on storage engine (check available dates with *list* action)
 
-      python3 manage_postgres_db.py --configfile sample.config --action restore --date "YYYY-MM-dd" --verbose true
+      python3 manage_postgres_db.py --configfile sample.config --action restore --date "YYYYMMdd" --verbose true
 
 * Restore previously created database backups into a new destination database
 
-      python3 manage_postgres_db.py --configfile sample.config --action restore --date "YYYY-MM-dd" --dest-db new_DB_name
+      python3 manage_postgres_db.py --configfile sample.config --action restore --date "YYYYMMdd" --dest-db new_DB_name
 
 ## Authors
 
 * **Val Feron** - *Initial work* - [github](https://github.com/valferon)
-
+* **Grzegorz Kalwig** - *other changes* - [github](https://github.com/gkalwig)
 
 ## LicenseMIT License
 

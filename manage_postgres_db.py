@@ -226,7 +226,6 @@ def create_db(db_host, database, db_port, user_name, user_password):
     except Exception as e:
         print(e)
         exit(1)
-
     con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     cur = con.cursor()
     try:
@@ -239,7 +238,8 @@ def create_db(db_host, database, db_port, user_name, user_password):
         print(e)
         exit(1)
     cur.execute("CREATE DATABASE {} ;".format(database))
-    cur.execute("GRANT ALL PRIVILEGES ON DATABASE {} TO {} ;".format(database, user_name))
+    # commented due to not properly handling capital letters in names
+    # cur.execute("GRANT ALL PRIVILEGES ON DATABASE {} TO my_user ;".format(database))
     return database
 
 
@@ -299,6 +299,7 @@ def main():
     args = args_parser.parse_args()
 
     config = configparser.ConfigParser()
+    config.optionxform=str
     config.read(args.configfile)
 
     postgres_host = config.get('postgresql', 'host')
@@ -364,6 +365,8 @@ def main():
             logger.info('Uploading {} to Amazon S3...'.format(comp_file))
             upload_to_s3(comp_file, filename_compressed, manager_config)
             logger.info("Uploaded to {}".format(filename_compressed))
+        else:
+            logger.error('storage_engine should be: "S3" or "LOCAL", but it was: "' + storage_engine + '"')
     # restore task
     elif args.action == "restore":
         if not args.date:
